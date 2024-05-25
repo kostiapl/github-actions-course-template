@@ -16,9 +16,9 @@ jobs:
     runs-on: self-hosted
     steps: 
       - uses: actions/checkout@v2
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v3
         with:
-          node-version: 14
+          node-version: 15
       - name: npm install and build webpack
         run: |
           npm install
