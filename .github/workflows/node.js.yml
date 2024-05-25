@@ -16,6 +16,19 @@ jobs:
     runs-on: self-hosted
     steps: 
       - uses: actions/checkout@v2
+      - name: Run Trivy vulnerability scanner in repo mode
+        uses: aquasecurity/trivy-action@0.20.0
+        with:
+         scan-type: 'fs'
+         ignore-unfixed: true
+         format: 'sarif'
+         output: 'trivy-results.sarif'
+         severity: 'CRITICAL'
+      - name: Upload Trivy scan results to GitHub Security tab
+        uses: github/codeql-action/upload-sarif@v2
+        with:
+          sarif_file: 'trivy-results.sarif'
+
       - uses: actions/setup-node@v3
         with:
           node-version: 16
@@ -39,19 +52,6 @@ jobs:
 
     steps:
     - uses: actions/checkout@v2
-    - name: Run Trivy vulnerability scanner in repo mode
-      uses: aquasecurity/trivy-action@0.20.0
-      with:
-        scan-type: 'fs'
-        ignore-unfixed: true
-        format: 'sarif'
-        output: 'trivy-results.sarif'
-        severity: 'CRITICAL'
-    - name: Upload Trivy scan results to GitHub Security tab
-      uses: github/codeql-action/upload-sarif@v2
-      with:
-        sarif_file: 'trivy-results.sarif'
-
     - uses: actions/download-artifact@master
       with: 
         name: webpack artifacts
